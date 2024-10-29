@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velion - Your Ultimate Discord Companion</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary-color: #8A2BE2;
+            --secondary-color: #4B0082;
+            --accent-color: #9370DB;
+            --text-color: #FFFFFF;
+            --background-color: #1E0033;
+            --success-color: #4CAF50;
+            --error-color: #F44336;
+            --warning-color: #FFC107;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--background-color), var(--secondary-color));
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background-color: rgba(30, 0, 51, 0.8);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: background-color 0.3s ease;
+        }
+
+        nav.scrolled {
+            background-color: rgba(30, 0, 51, 0.95);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 2rem;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            color: var(--text-color);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(147, 112, 219, 0.4);
+        }
+
+        header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .features {
+            padding: 4rem 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        .testimonials {
+            padding: 4rem 0;
+            background-color: rgba(75, 0, 130, 0.3);
+        }
+
+        .testimonial-carousel {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .testimonial {
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            position: absolute;
+            width: 100%;
+        }
+
+        .testimonial.active {
+            opacity: 1;
+        }
+
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .carousel-button.prev {
+            left: 10px;
+        }
+
+        .carousel-button.next {
+            right: 10px;
+        }
+
+        .pricing {
+            padding: 4rem 0;
+            background-color: rgba(30, 0, 51, 0.5);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-plan {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-plan:hover {
+            transform: scale(1.05);
+        }
+
+        .pricing-plan h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-plan .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-plan ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-plan ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .faq {
+            padding: 4rem 0;
+        }
+
+        .faq-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            display: none;
+            padding-top: 1rem;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        .integrations {
+            padding: 4rem 0;
+            background-color: rgba(75, 0, 130, 0.2);
+        }
+
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            justify-items: center;
+        }
+
+        .integration-item {
+            text-align: center;
+        }
+
+        .integration-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        .roadmap {
+            padding: 4rem 0;
+        }
+
+        .roadmap-timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roadmap-timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--accent-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .roadmap-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+
+        .roadmap-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: var(--accent-color);
+            border: 4px solid var(--primary-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--accent-color);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--accent-color);
+        }
+
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--accent-color);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--accent-color) transparent transparent;
+        }
+
+        .right::after {
+            left: -16px;
+        }
+
+        .roadmap-content {
+            padding: 20px 30px;
+            background-color: rgba(255, 255, 255, 0.1);
+            position: relative;
+            border-radius: 6px;
+        }
+
+        .community {
+            padding: 4rem 0;
+            background-color: rgba(30, 0, 51, 0.5);
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .community-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .community-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .community-item i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+
+        footer {
+            background-color: rgba(30, 0, 51, 0.9);
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .social-links a {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input, textarea {
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: var(--background-color);
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid var(--accent-color);
+            width: 80%;
+            max-width: 500px;
+            
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: var(--text-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            display: none;
+        }
+
+        .feature-showcase {
+            padding: 4rem 0;
+            background-color: rgba(75, 0, 130, 0.2);
+        }
+
+        .feature-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .feature-tab {
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .feature-tab.active {
+            background-color: var(--accent-color);
+        }
+
+        .feature-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .feature-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .stats {
+            padding: 4rem 0;
+            background-color: rgba(30, 0, 51, 0.5);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(147, 112, 219, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(147, 112, 219, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(147, 112, 219, 0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .social-links, form {
+                margin-top: 2rem;
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            .tagline {
+                font-size: 1.2rem;
+            }
+
+            .roadmap-timeline::after {
+                left: 31px;
+            }
+
+            .roadmap-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .roadmap-item::before {
+                left: 60px;
+                border: medium solid var(--accent-color);
+                border-width: 10px 10px 10px 0;
+                border-color: transparent var(--accent-color) transparent transparent;
+            }
+
+            .left::after, .right::after {
+                left: 15px;
+            }
+
+            .right {
+                left: 0%;
+            }
+        }
+
+        .review {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">
+                <div class="logo-icon"></div>
+                Velion
+            </a>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="#" class="cta-button" id="inviteBtn">Invite Velion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header id="home">
+        <div class="stars"></div>
+        <div class="container">
+            <h1>Velion</h1>
+            <p class="tagline">Your Ultimate Discord Companion</p>
+            <a href="#" class="cta-button" id="headerInviteBtn">Invite to Discord</a>
+        </div>
+    </header>
+
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Moderation Tools</h3>
+                    <p>Keep your server safe and organized with powerful moderation features.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Leveling System</h3>
+                    <p>Engage your community with a customizable leveling system.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-code"></i>
+                    <h3>Custom Commands</h3>
+                    <p>Create unique commands tailored to your server's needs.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-users-cog"></i>
+                    <h3>Role Management</h3>
+                    <p>Easily manage and assign roles to keep your server structured.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-music"></i>
+                    <h3>Music Playback</h3>
+                    <p>Enjoy high-quality music playback in your voice channels.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Event Scheduler</h3>
+                    <p>Plan and manage server events with ease.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-poll"></i>
+                    <h3>Polls and Surveys</h3>
+                    <p>Gather opinions and make decisions with interactive polls.</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI Chat Assistant</h3>
+                    <p>Engage with an intelligent chatbot for fun and support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-showcase">
+        <div class="container">
+            <h2>Feature Showcase</h2>
+            <div class="feature-tabs">
+                <div class="feature-tab active" data-tab="moderation">Moderation</div>
+                <div class="feature-tab" data-tab="leveling">Leveling</div>
+                <div class="feature-tab" data-tab="music">Music</div>
+                <div class="feature-tab" data-tab="ai">AI Assistant</div>
+            </div>
+            <div class="feature-content active" id="moderation">
+                <h3>Advanced Moderation Tools</h3>
+                <p>Keep your server safe with our powerful moderation features:</p>
+                <ul>
+                    <li>Auto-moderation for spam and inappropriate content</li>
+                    <li>Customizable warning system</li>
+                    <li>Temporary and permanent bans</li>
+                    <li>Detailed moderation logs</li>
+                </ul>
+            </div>
+            <div class="feature-content" id="leveling">
+                <h3>Engaging Leveling System</h3>
+                <p>Boost community engagement with our customizable leveling system:</p>
+                <ul>
+                    <li>XP gain from messages and voice activity</li>
+                    <li>Custom level-up messages and rewards</li>
+                    <li>Leaderboards and profile cards</li>
+                    <li>Role rewards for reaching specific levels</li>
+                </ul>
+            </div>
+            <div class="feature-content" id="music">
+                <h3>High-Quality Music Playback</h3>
+                <p>Enhance your voice channels with our music features:</p>
+                <ul>
+                    <li>Support for multiple music sources (YouTube, Spotify, SoundCloud)</li>
+                    <li>High-quality audio streaming</li>
+                    <li>Queue management and playlist support</li>
+                    <li>Lyrics display and music trivia games</li>
+                </ul>
+            </div>
+            <div class="feature-content" id="ai">
+                <h3>AI-Powered Chat Assistant</h3>
+                <p>Experience the future of Discord bots with our AI assistant:</p>
+                <ul>
+                    <li>Natural language processing for human-like interactions</li>
+                    <li>Contextual responses and memory of past conversations</li>
+                    <li>Ability to answer questions and provide information</li>
+                    <li>Customizable personality to fit your server's theme</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2>What Our Users Say</h2>
+            <div class="testimonial-carousel">
+                <div class="testimonial active">
+                    <p>"Velion has completely transformed our server management!"</p>
+                    <div class="review">
+                        <span class="stars">★★★★★</span>
+                        <p><strong>Alice, Server Owner</strong></p>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>"The custom commands feature is a game-changer for our community."</p>
+                    <div class="review">
+                        <span class="stars">★★★★☆</span>
+                        <p><strong>Bob, Moderator</strong></p>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>"I can't imagine running my Discord server without Velion now."</p>
+                    <div class="review">
+                        <span class="stars">★★★★★</span>
+                        <p><strong>Charlie, Community Manager</strong></p>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <p>"The leveling system has really boosted engagement in our server."</p>
+                    <div class="review">
+                        <span class="stars">★★★★☆</span>
+                        <p><strong>Diana, Content Creator</strong></p>
+                    </div>
+                </div>
+                <button class="carousel-button prev">&lt;</button>
+                <button class="carousel-button next">&gt;</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2>Pricing Plans</h2>
+            <div class="pricing-grid">
+                <div class="pricing-plan">
+                    <h3>Basic</h3>
+                    <p class="price">Free</p>
+                    <ul>
+                        <li>Moderation Tools</li>
+                        <li>Basic Leveling System</li>
+                        <li>5 Custom Commands</li>
+                        <li>Standard Support</li>
+                    </ul>
+                    <a href="#" class="cta-button">Get Started</a>
+                </div>
+                <div class="pricing-plan">
+                    <h3>Pro</h3>
+                    <p class="price">$9.99/mo</p>
+                    <ul>
+                        <li>All Basic Features</li>
+                        <li>Advanced Leveling System</li>
+                        <li>Unlimited Custom Commands</li>
+                        <li>Music Playback</li>
+                        <li>Priority Support</li>
+                    </ul>
+                    <a href="#" class="cta-button">Upgrade to Pro</a>
+                </div>
+                <div class="pricing-plan">
+                    <h3>Enterprise</h3>
+                    <p class="price">Custom</p>
+                    <ul>
+                        <li>All Pro Features</li>
+                        <li>Dedicated Support</li>
+                        <li>Custom Integrations</li>
+                        <li>Branded Bot</li>
+                    </ul>
+                    <a href="#" class="cta-button">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2>Velion by the Numbers</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="serverCount">0</div>
+                    <p>Servers</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="userCount">0</div>
+                    <p>Users</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="commandCount">0</div>
+                    <p>Commands Executed</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="uptimePercentage">0%</div>
+                    <p>Uptime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="integrations">
+        <div class="container">
+            <h2>Integrations</h2>
+            <div class="integration-grid">
+                <div class="integration-item">
+                    <img src="https://example.com/youtube-logo.png" alt="YouTube Logo">
+                    <p>YouTube</p>
+                </div>
+                <div class="integration-item">
+                    <img src="https://example.com/spotify-logo.png" alt="Spotify Logo">
+                    <p>Spotify</p>
+                </div>
+                <div class="integration-item">
+                    <img src="https://example.com/twitch-logo.png" alt="Twitch Logo">
+                    <p>Twitch</p>
+                </div>
+                <div class="integration-item">
+                    <img src="https://example.com/reddit-logo.png" alt="Reddit Logo">
+                    <p>Reddit</p>
+                </div>
+                <div class="integration-item">
+                    <img src="https://example.com/twitter-logo.png" alt="Twitter Logo">
+                    <p>Twitter</p>
+                </div>
+                <div class="integration-item">
+                    <img src="https://example.com/github-logo.png" alt="GitHub Logo">
+                    <p>GitHub</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <h2>Roadmap</h2>
+            <div class="roadmap-timeline">
+                <div class="roadmap-item left">
+                    <div class="roadmap-content">
+                        <h3>Q3 2023</h3>
+                        <p>Launch of AI-powered chat assistant</p>
+                    </div>
+                </div>
+                <div class="roadmap-item right">
+                    <div class="roadmap-content">
+                        <h3>Q4 2023</h3>
+                        <p>Improved music playback features</p>
+                    </div>
+                </div>
+                <div class="roadmap-item left">
+                    <div class="roadmap-content">
+                        <h3>Q1 2024</h3>
+                        <p>Advanced server analytics dashboard</p>
+                    </div>
+                </div>
+                <div class="roadmap-item right">
+                    <div class="roadmap-content">
+                        <h3>Q2 2024</h3>
+                        <p>Integration with more third-party services</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How do I invite Velion to my server?</h3>
+                    <span class="toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>To invite Velion to your server, simply click on the "Invite Velion" button at the top of this page and follow the Discord authorization process.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Is Velion compatible with other bots?</h3>
+                    <span class="toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, Velion is designed to work alongside other Discord bots without conflicts. However, we recommend checking for command overlaps to ensure smooth operation.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>Can I customize Velion's prefix?</h3>
+                    <span class="toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>You can easily change Velion's command prefix to suit your server's needs using the !setprefix command.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h3>How often is Velion updated?</h3>
+                    <span class="toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>We release updates for Velion on a bi-weekly basis, including new features, improvements, and bug fixes. Major updates are announced on our Discord server and website.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="community">
+        <div class="container">
+            <h2>Join Our Community</h2>
+            <div class="community-grid">
+                <div class="community-item">
+                    <i class="fab fa-discord"></i>
+                    <h3>Discord Server</h3>
+                    <p>Join our official Discord server to get support, share ideas, and connect with other Velion users.</p>
+                    <a href="#" class="cta-button">Join Server</a>
+                </div>
+                <div class="community-item">
+                    <i class="fab fa-github"></i>
+                    <h3>GitHub</h3>
+                    <p>Contribute to Velion's development, report issues, or explore our open-source projects.</p>
+                    <a href="#" class="cta-button">View Repository</a>
+                </div>
+                <div class="community-item">
+                    <i class="fas fa-book"></i>
+                    <h3>Documentation</h3>
+                    <p>Access comprehensive guides and API documentation to make the most of Velion.</p>
+                    <a href="#" class="cta-button">Read Docs</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="support">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <a href="#" class="logo">
+                        <div class="logo-icon"></div>
+                        Velion
+                    </a>
+                    <p>Enhancing Discord communities, one server at a time.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+                <form id="contactForm">
+                    <input type="email" placeholder="Your email" required>
+                    <textarea placeholder="Your message" required></textarea>
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </footer>
+
+    <div id="inviteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Invite Velion to Your Server</h2>
+            <p>Ready to enhance your Discord experience? Click the button below to add Velion to your server!</p>
+            <a href="https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=8&scope=bot%20applications.commands" class="cta-button" target="_blank">Add to Discord</a>
+        </div>
+    </div>
+
+    <div id="notification"></div>
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animated stars background
+            const starsContainer = document.querySelector('.stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.width = star.style.height = Math.random() * 3 + 'px';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                starsContainer.appendChild(star);
+            }
+
+            // Feature animations on scroll
+            const features = document.querySelectorAll('.feature');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            features.forEach(feature => {
+                observer.observe(feature);
+            });
+
+            // Testimonial carousel
+            const testimonials = document.querySelectorAll('.testimonial');
+            const prevButton = document.querySelector('.carousel-button.prev');
+            const nextButton = document.querySelector('.carousel-button.next');
+            let currentTestimonial = 0;
+
+            function showTestimonial(index) {
+                testimonials.forEach(t => t.classList.remove('active'));
+                testimonials[index].classList.add('active');
+            }
+
+            prevButton.addEventListener('click', () => {
+                currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+                showTestimonial(currentTestimonial);
+            });
+
+            nextButton.addEventListener('click', () => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                showTestimonial(currentTestimonial);
+            });
+
+            // Auto-rotate testimonials
+            setInterval(() => {
+                currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+                showTestimonial(currentTestimonial);
+            }, 5000);
+
+            // FAQ accordion
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const answer = question.nextElementSibling;
+                    const toggle = question.querySelector('.toggle');
+                    answer.classList.toggle('active');
+                    toggle.textContent = answer.classList.contains('active') ? '-' : '+';
+                });
+            });
+
+            // Invite modal
+            const modal = document.getElementById('inviteModal');
+            const inviteBtn = document.getElementById('inviteBtn');
+            const headerInviteBtn = document.getElementById('headerInviteBtn');
+            const closeBtn = document.getElementsByClassName('close')[0];
+
+            function openModal() {
+                modal.style.display = 'block';
+            }
+
+            function closeModal() {
+                modal.style.display = 'none';
+            }
+
+            inviteBtn.onclick = openModal;
+            headerInviteBtn.onclick = openModal;
+            closeBtn.onclick = closeModal;
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+
+            // Contact form submission
+            const contactForm = document.getElementById('contactForm');
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Simulate form submission
+                setTimeout(() => {
+                    showNotification('Message sent successfully!', 'success');
+                    contactForm.reset();
+                }, 1000);
+            });
+
+            // Notification system
+            function showNotification(message, type) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.style.backgroundColor = type === 'success' ? 'var(--success-color)' : 'var(--error-color)';
+                notification.style.display = 'block';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+
+            // Navbar background change on scroll
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                if (window.scrollY > 50) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // Feature showcase tabs
+            const featureTabs = document.querySelectorAll('.feature-tab');
+            const featureContents = document.querySelectorAll('.feature-content');
+
+            featureTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    featureTabs.forEach(t => t.classList.remove('active'));
+                    featureContents.forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+
+            // Animated statistics
+            function animateValue(obj, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    obj.innerHTML = Math.floor(progress * (end - start) + start);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            const serverCount = document.getElementById("serverCount");
+            const userCount = document.getElementById("userCount");
+            const commandCount = document.getElementById("commandCount");
+            const uptimePercentage = document.getElementById("uptimePercentage");
+
+            animateValue(serverCount, 0, 10000, 2000);
+            animateValue(userCount, 0, 1000000, 2000);
+            animateValue(commandCount, 0, 5000000, 2000);
+            animateValue(uptimePercentage, 0, 99, 2000);
+        });
+    </script>
+</body>
+</html>
